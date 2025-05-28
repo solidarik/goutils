@@ -20,6 +20,10 @@ func CreateFolder(filePath string) {
 }
 
 func DeleteFolder(filePath string) {
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		log.Debugf("Folder does not exist at path: %s, skipping delete", filePath)
+		return
+	}
 	err := os.RemoveAll(filePath)
 	if err != nil {
 		log.Fatalf("Failed to delete folder: %v", err)
