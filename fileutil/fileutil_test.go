@@ -41,3 +41,29 @@ func TestCreateFolder(t *testing.T) {
 		os.RemoveAll(rootFolder)
 	}
 }
+func TestDeleteFolder(t *testing.T) {
+	rootFolder := "storage_test_delete"
+
+	// Create a nested folder structure to delete
+	folderPath := rootFolder + "/to_delete/subfolder"
+	err := os.MkdirAll(folderPath, 0755)
+	if err != nil {
+		t.Fatalf("failed to set up test folder: %v", err)
+	}
+
+	// Ensure the folder exists before deletion
+	if _, err := os.Stat(folderPath); os.IsNotExist(err) {
+		t.Fatalf("expected folder %s to exist before deletion", folderPath)
+	}
+
+	// Call DeleteFolder on the root of the structure
+	DeleteFolder(rootFolder + "/to_delete")
+
+	// Check that the folder and its contents are deleted
+	if _, err := os.Stat(rootFolder + "/to_delete"); !os.IsNotExist(err) {
+		t.Errorf("expected folder %s to be deleted, but it still exists", rootFolder+"/to_delete")
+	}
+
+	// Clean up
+	os.RemoveAll(rootFolder)
+}

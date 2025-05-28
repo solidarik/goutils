@@ -19,6 +19,14 @@ func CreateFolder(filePath string) {
 	log.Debugf("Created folder at path: %s", filePath)
 }
 
+func DeleteFolder(filePath string) {
+	err := os.RemoveAll(filePath)
+	if err != nil {
+		log.Fatalf("Failed to delete folder: %v", err)
+	}
+	log.Debugf("Deleted folder at path: %s", filePath)
+}
+
 func SaveUrlToFile(url string, filePath string) {
 	resp, err := http.Get(url)
 	if err != nil {
